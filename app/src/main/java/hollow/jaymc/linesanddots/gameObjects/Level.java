@@ -21,6 +21,17 @@ public class Level implements Cloneable{
     private int width;
     private int height;
 
+    public Level() {
+        this.dots = new ArrayList<Dot>();
+        this.lines = new ArrayList<Line>();
+        this.score = -1;
+        this.time = -1;
+        this.turns = -1;
+        this.width = 100;
+        this.height = 100;
+        this.stars = 0;
+    }
+
     public Level(List<Dot> dots, List<Line> lines) {
         this.dots = dots;
         this.lines = lines;

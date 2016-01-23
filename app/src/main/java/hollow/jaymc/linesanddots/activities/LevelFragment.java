@@ -26,18 +26,20 @@ public class LevelFragment extends Fragment {
     private String title;
     public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
 
-    public static final int NUM_COL = 5;
-    public static final int NUM_ROW = 5;
+    public int NUM_COL = 5;
+    public int NUM_ROW = 5;
 
     private ScrollView scrollView;
 
     public LevelFragment() {}
 
-    public static final LevelFragment newInstance(String message)
+    public static final LevelFragment newInstance(String worldName, int levels)
     {
         LevelFragment f = new LevelFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putString(EXTRA_MESSAGE, message);
+        bdl.putString(EXTRA_MESSAGE, worldName);
+        bdl.putString("TITLE", worldName);
+        bdl.putInt("NUMBER_OF_LEVELS", levels);
         f.setArguments(bdl);
         return f;
     }
@@ -49,6 +51,8 @@ public class LevelFragment extends Fragment {
                              Bundle savedInstanceState) {
         String message = getArguments().getString(EXTRA_MESSAGE);
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_level_2, container, false);
+
+
 
 
         scrollView = new ScrollView(v.getContext());
@@ -80,6 +84,7 @@ public class LevelFragment extends Fragment {
                     }
                 });
                 for (int col = 0; col < NUM_ROW; col++) {
+                    if(row * NUM_COL + col <= )
                     Button button = new Button(v.getContext());
                     button.setText("" + row + ", " + col + "");
                     tableRow.addView(button);

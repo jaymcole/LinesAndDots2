@@ -13,6 +13,11 @@ import hollow.jaymc.linesanddots.gameObjects.Line;
  */
 public class Utils {
 
+    /**
+     * Generates a default Level object.
+     * @return
+     */
+
     public static Level getTestLevel() {
         Level testLevel;
         List<Dot> dots = new ArrayList<>();
@@ -34,4 +39,46 @@ public class Utils {
         return testLevel;
     }
 
+    /**
+     * Converts theString into a list of Integers.
+     * Assumes " " as delimiter.
+     * @return
+     */
+    public static List<Integer> processString(String theString) {
+        theString = theString.trim();
+        String[] stringInts = theString.split(" ");
+        List<Integer> ints = new ArrayList<>();
+
+        for(int i = 0; i < stringInts.length; i++) {
+            ints.add(Integer.parseInt(stringInts[i].trim()));
+        }
+
+        return ints;
+    }
+
+    /**
+     * Creates and returns a list of Dot objects from a list of Integers.
+     * @param ints
+     * @return
+     */
+    public static List<Dot> getDots(List<Integer> ints) {
+        List<Dot> dots = new ArrayList<>();
+        for(int i = 0 ; i < ints.size()-1; i+=2) {
+            dots.add(new Dot(ints.get(i), ints.get(i+1)));
+        }
+        return dots;
+    }
+
+    /**
+     * Creates and returns a list of Line objects from a list of Dot objects and Integers.
+     * @param dots, ints
+     * @return
+     */
+    public static List<Line> getLines(List<Dot> dots, List<Integer> ints) {
+        List<Line> lines = new ArrayList<>();
+        for(int i = 0 ; i < ints.size()-1; i+=2) {
+            lines.add(new Line(dots.get(ints.get(i)), ints.get(i), dots.get(ints.get(i+1)), ints.get(i+1) ));
+        }
+        return lines;
+    }
 }

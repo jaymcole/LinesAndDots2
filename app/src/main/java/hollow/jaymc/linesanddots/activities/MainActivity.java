@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import hollow.jaymc.linesanddots.R;
 import hollow.jaymc.linesanddots.utils.Reader;
@@ -40,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test(View view) {
-        Reader.LoadLevel(getResources().openRawResource(R.raw.levels), 0, 0);
+        Reader.LoadLevel(this, 0, 0);
+        Log.d(TAG, "-----------------");
+        List<String> worlds = new ArrayList<>();
+        List<Integer> levels = new ArrayList<>();
+        Reader.getLevelContext(this, worlds, levels);
+        Log.d(TAG, "Worlds: " + worlds.size() + ", Levels: " + levels.size());
+        for(int i = 0; i < worlds.size(); i++ ) {
+            Log.d(TAG, "World: " + worlds.get(i) + ", " + levels.get(i+1));
+        }
+
     }
 }
