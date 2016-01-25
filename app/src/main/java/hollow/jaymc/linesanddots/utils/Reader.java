@@ -104,26 +104,28 @@ public class Reader {
                 int worldCounter = 0;
                 List<Integer> scores = new ArrayList<>();
                 World world = new World();
-                boolean newWorld = false;
+//                boolean newWorld = false;
 
                 if(line.startsWith("#")) {
-                    newWorld = true;
+//                    newWorld = true;
                     world = new World(line.substring(1, line.length()), worldCounter);
                     worldCounter++;
                 }
 
-                while (!line.startsWith("#")) {
+                while (line != null && !line.startsWith("#")) {
                     if(line.startsWith("$")) {
                         levelCounter++;
                         scores.add(Integer.parseInt(line.split(";")[1]));
+
                     }
+                    line = br.readLine();
                 }
 
-                if ( !newWorld ) {
+//                if ( !newWorld ) {
                     world.setNumberOfLevels(levelCounter);
                     world.setScores(scores);
                     worlds.add(world);
-                }
+//                }
 
 
 
@@ -142,6 +144,7 @@ public class Reader {
             }
 //            levels.add(levelCounter);
 //            levels.remove(0);
+            worlds.remove(0);
             br.close();
             closeStreams();
         } catch (FileNotFoundException e) {
