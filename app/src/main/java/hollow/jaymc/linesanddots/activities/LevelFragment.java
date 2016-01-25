@@ -1,21 +1,20 @@
 package hollow.jaymc.linesanddots.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import hollow.jaymc.linesanddots.R;
-import hollow.jaymc.linesanddots.objects.World;
+import hollow.jaymc.linesanddots.gameObjects.World;
 
 /**
  * Created by jaymc on
@@ -24,22 +23,35 @@ import hollow.jaymc.linesanddots.objects.World;
 public class LevelFragment extends Fragment {
     private static final String TAG = LevelFragment.class.getName();
     private String title;
-    public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
+    public static final String NUMBER_OF_LEVELS = "NUMBER_OF_LEVELS";
+    public static final String WORLD_ID = "WORLD_ID";
+    public static final String TITLE = "TITLE";
+    public static final String SCORES = "SCORES";
 
-    public int NUM_COL = 5;
-    public int NUM_ROW = 5;
+    public static final int NUM_COL = 5;
 
     private ScrollView scrollView;
-
     public LevelFragment() {}
 
-    public static final LevelFragment newInstance(String worldName, int levels)
+    public static final LevelFragment newInstance(World world)
     {
         LevelFragment f = new LevelFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putString(EXTRA_MESSAGE, worldName);
-        bdl.putString("TITLE", worldName);
-        bdl.putInt("NUMBER_OF_LEVELS", levels);
+        bdl.putString(TITLE, world.getWorldName());
+        bdl.putInt(NUMBER_OF_LEVELS, world.getNumberOfLevels());
+        bdl.putInt(WORLD_ID, world.getWorldID());
+        bdl.putIntArray(SCORES, world.getScores());
+        f.setArguments(bdl);
+        return f;
+    }
+
+    public static final LevelFragment newInstance(String worldName, int worldIndex, int levels)
+    {
+        LevelFragment f = new LevelFragment();
+        Bundle bdl = new Bundle(1);
+        bdl.putString(TITLE, worldName);
+        bdl.putInt(NUMBER_OF_LEVELS, levels);
+        bdl.putInt(WORLD_ID, worldIndex);
         f.setArguments(bdl);
         return f;
     }
@@ -49,11 +61,10 @@ public class LevelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        String message = getArguments().getString(EXTRA_MESSAGE);
+        String message = getArguments().getString(TITLE);
+        int totalLevels = getArguments().getInt(NUMBER_OF_LEVELS);
+
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_level_2, container, false);
-
-
-
 
         scrollView = new ScrollView(v.getContext());
         final TableLayout tableLayout = new TableLayout(v.getContext());
@@ -67,12 +78,15 @@ public class LevelFragment extends Fragment {
                 return false;
             }
         });
+
         TableLayout.LayoutParams params = new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.MATCH_PARENT,
                 1.0f);
 
-            for (int row = 0; row < NUM_ROW; row++) {
+        int num_row = totalLevels / NUM_COL ;
+        Log.e(TAG, "Rows: " + num_row);
+            for (int row = 0; row <= num_row; row++) {
                 TableRow tableRow = new TableRow(v.getContext());
                 tableRow.setLayoutParams(params);
                 tableRow.setOnLongClickListener(new View.OnLongClickListener() {
@@ -83,11 +97,24 @@ public class LevelFragment extends Fragment {
                         return false;
                     }
                 });
-                for (int col = 0; col < NUM_ROW; col++) {
-                    if(row * NUM_COL + col <= )
-                    Button button = new Button(v.getContext());
-                    button.setText("" + row + ", " + col + "");
-                    tableRow.addView(button);
+                for (int col = 0; col < NUM_COL; col++) {
+                    if(row * NUM_COL + col < totalLevels) {
+                        Button button = new Button(v.getContext());
+                        button.setText("" + row + ", " + col + "");
+
+                        final int worldID = getArguments().getInt(WORLD_ID);
+                        final int levelId = row * NUM_COL + col;
+
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final int w = worldID;
+                                final int l = levelId;
+                                startGame(v.getContext(), w, l);
+                            }
+                        });
+                        tableRow.addView(button);
+                    }
                 }
                 tableLayout.addView(tableRow);
             }
@@ -96,6 +123,17 @@ public class LevelFragment extends Fragment {
             v.addView(scrollView);
 
         return v;
+    }
+
+    private void startGame(Context context, int worldID, int levelID) {
+        Log.d(TAG, "Starting game activity");
+        Intent intent = new Intent(context, GameActivity.class);
+//        Bundle extras = intent.getExtras();
+        Bundle extras = new Bundle();
+        extras.putInt(GameActivity.WORLD_ID, worldID);
+        extras.putInt(GameActivity.LEVEL_ID, levelID);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 }
 

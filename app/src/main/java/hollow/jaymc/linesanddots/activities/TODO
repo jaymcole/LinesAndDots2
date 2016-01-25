@@ -1,0 +1,21 @@
+General
+    - Options/Settings Activity
+    - About Activity
+
+GameActivity:
+    - Fix status bar (Background) color
+
+    - Add AdMob
+
+
+LevelActivity:
+    - Fix status bar (Background) color
+    - Fix lag when scrolling though pages too quickly
+
+
+
+Changes
+- GameActivity now load a level from information provided in a bundle.
+- Added a PagerTabStrip to the LevelActivity.
+- Added Log.i to Util.getTestLevel();
+- Fix a bug preventing LevelFragments from creating enough buttons.

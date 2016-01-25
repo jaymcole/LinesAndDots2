@@ -23,12 +23,16 @@ import hollow.jaymc.linesanddots.gameObjects.Dot;
 import hollow.jaymc.linesanddots.gameObjects.Level;
 import hollow.jaymc.linesanddots.gameObjects.Line;
 import hollow.jaymc.linesanddots.utils.Point2D;
+import hollow.jaymc.linesanddots.utils.Reader;
 import hollow.jaymc.linesanddots.utils.Utils;
 
 public class GameActivity extends Activity {
 
     private static final String TAG = GameActivity.class.getName();
     private MyView gamePanel;
+
+    public static final String WORLD_ID = "WORLD_ID";
+    public static final String LEVEL_ID = "LEVEL_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class GameActivity extends Activity {
         Log.d(TAG, "Path: " + path.toString());
         File file = new File(path, "my-file-name.txt");
 //      TODO - Load Level form file instead of using default test level.
-        level = Utils.getTestLevel();
+        level = Reader.LoadLevel(this, getIntent().getExtras().getInt(WORLD_ID), getIntent().getExtras().getInt(LEVEL_ID));
         createLevel();
         gamePanel = new MyView(this);
         setContentView(gamePanel);

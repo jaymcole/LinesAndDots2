@@ -1,5 +1,7 @@
 package hollow.jaymc.linesanddots.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,12 +15,14 @@ import hollow.jaymc.linesanddots.gameObjects.Line;
  */
 public class Utils {
 
+    private static final String TAG = Utils.class.getName();
+
     /**
      * Generates a default Level object.
      * @return
      */
-
     public static Level getTestLevel() {
+        Log.i(TAG, "Loading default level.");
         Level testLevel;
         List<Dot> dots = new ArrayList<>();
         List<Line> lines = new ArrayList<>();

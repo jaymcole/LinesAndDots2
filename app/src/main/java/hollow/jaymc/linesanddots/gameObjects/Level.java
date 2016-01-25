@@ -14,6 +14,7 @@ public class Level implements Cloneable{
 
     private List<Dot> dots;
     private List<Line> lines;
+    private String tag;
     private int score;
     private int time;
     private int stars;
@@ -49,6 +50,13 @@ public class Level implements Cloneable{
         this.score = score;
         this.time = time;
         this.turns = turns;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+    public String getTag () {
+        return tag;
     }
 
     public List<Dot> getDots() {
