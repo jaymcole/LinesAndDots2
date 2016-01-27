@@ -15,6 +15,14 @@ LevelActivity:
 
 
 Changes
+
+1/25/16
+    - Added strings tot he resource file.
+        - Updated Main activity buttons with string references instead of hardcoded text.
+    + Fixed infinite loop in Reader.java.
+
+
+1/24/16
 - GameActivity now load a level from information provided in a bundle.
 - Added a PagerTabStrip to the LevelActivity.
 - Added Log.i to Util.getTestLevel();

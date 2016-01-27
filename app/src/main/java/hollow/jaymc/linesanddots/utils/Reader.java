@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,8 @@ import hollow.jaymc.linesanddots.gameObjects.Level;
 import hollow.jaymc.linesanddots.gameObjects.World;
 
 /**
- * Created by jaymc on 1/21/2016.
+ * Created by jaymc
+ * 1/21/2016.
  */
 public class Reader {
     public static final int TAG_POS = 0;
@@ -38,10 +40,30 @@ public class Reader {
      * @return  BufferedReader  The BufferedReader ready to read from the level data file.
      */
     private static BufferedReader getReader(Context context) {
-        //TODO - Can this be done without passing context from a parent activity?
         is = context.getResources().openRawResource(LEVEL_DATA_ID);
         isr = new InputStreamReader(is);
         return new BufferedReader(isr);
+    }
+
+    public static List<String> loadSaves(InputStream inputStream){
+        List<String> saves = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        try {
+            while((line = br.readLine()) != null) {
+                Log.d(TAG, line);
+                saves.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return saves;
     }
 
     /**
@@ -50,10 +72,9 @@ public class Reader {
      * @param context
      * @param worldID   An Integeer denoting which world to load.
      * @param levelID   An Integer denoting which level to load.
-     * @return Level    A level object constructed from
+     * @return          A level object constructed from
      */
     public static Level LoadLevel(Context context, int worldID, int levelID) {
-//        TODO - Make this better...
         try {
             BufferedReader br = getReader(context);
             String line;

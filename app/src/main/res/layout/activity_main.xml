@@ -9,7 +9,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game Activity"
+        android:text="@string/main_activity_start"
         android:id="@+id/button"
         android:onClick="startGameActivity"
         android:layout_centerVertical="true"
@@ -18,7 +18,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Level Activity"
+        android:text="@string/main_activity_level_select"
         android:id="@+id/button2"
         android:onClick="startLevelActivity"
         android:layout_below="@+id/button"

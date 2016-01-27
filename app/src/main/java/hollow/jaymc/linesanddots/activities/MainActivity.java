@@ -12,6 +12,7 @@ import java.util.List;
 import hollow.jaymc.linesanddots.R;
 import hollow.jaymc.linesanddots.gameObjects.World;
 import hollow.jaymc.linesanddots.utils.Reader;
+import hollow.jaymc.linesanddots.utils.Writer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,16 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test(View view) {
-//        Reader.LoadLevel(this, 0, 0);
-//        Log.d(TAG, "-----------------");
-//        List<String> worlds = new ArrayList<>();
-//        List<Integer> levels = new ArrayList<>();
-//        List<World> worlds = new ArrayList<>();
-//        Reader.getLevelCount(this, worlds);
-//        Log.d(TAG, "Worlds: " + worlds.size() + ", Levels: " + worlds.get());
-//        for(int i = 0; i < worlds.size(); i++ ) {
-//            Log.d(TAG, "World: " + worlds.get(i) + ", " + levels.get(i+1));
-//        }
-
+        Log.d(TAG, "Save Test.");
+        Writer.saveLevel(this, "", 1, 1);
     }
 }
