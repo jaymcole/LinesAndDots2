@@ -26,7 +26,7 @@ public class Writer {
 
     public static void saveLevel(Context context, String tag, int score, int turns) {
         File file = context.getFilesDir();
-        File save = new File(file.getPath() + "/saves.txt");
+        File save = new File(file.getPath() + "/" + Reader.SAVE_FILE);
 
         if (!save.exists()) {
             try {

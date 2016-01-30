@@ -22,11 +22,12 @@ import hollow.jaymc.linesanddots.gameObjects.World;
  */
 public class Reader {
     public static final int TAG_POS = 0;
-    public static final int SCORE_POS = 1;
-    public static final int TURNS_POS = 2;
-    public static final int DOTS_POS = 3;
-    public static final int LINES_POS = 4;
+//    public static final int SCORE_POS = 1;
+//    public static final int TURNS_POS = 2;
+    public static final int DOTS_POS = 1;
+    public static final int LINES_POS = 2;
 
+    public static final String SAVE_FILE = "saves.txt";
 
     private static final String TAG = Reader.class.getName();
     private static final int LEVEL_DATA_ID = R.raw.levels;
@@ -77,9 +78,9 @@ public class Reader {
     public static Level LoadLevel(Context context, int worldID, int levelID) {
         try {
             BufferedReader br = getReader(context);
-            String line;
-            String levelTag = "W" + worldID + "L" + levelID;
-            Log.d(TAG, "Looking for \"" + "$" + levelTag + "\"");
+            String line = "";
+            String levelTag = "$W" + worldID + "L" + levelID;
+            Log.d(TAG, "Looking for \"" + levelTag + "\"");
             while ((line = br.readLine()) != null && !line.trim().startsWith(levelTag)) {
 
             }
@@ -108,14 +109,30 @@ public class Reader {
         Level level = new Level();
         String[] attributes = line.split(";");
         level.setTag(attributes[TAG_POS]);
-        level.setTurns(Integer.parseInt(attributes[TURNS_POS]));
-        level.setScore(Integer.parseInt(attributes[SCORE_POS]));
+//        level.setTurns(Integer.parseInt(attributes[TURNS_POS]));
+//        level.setScore(Integer.parseInt(attributes[SCORE_POS]));
         level.setDots(Utils.getDots(Utils.processString(attributes[DOTS_POS])));
         level.setLines(Utils.getLines(level.getDots(), Utils.processString(attributes[LINES_POS])));
         return level;
     }
 
-    public static void getLevelCount(Context context, List<World> worlds) {
+    public static List<String> getSaves(Context context) {
+        List<String> scores = new ArrayList<>();
+        File saves = new File(context.getFilesDir() + "/" + SAVE_FILE);
+        if(saves.exists()) {
+            try {
+                is = context.openFileInput(saves.getAbsolutePath());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            isr = new InputStreamReader(is);
+            BufferedReader br = getReader(context);
+        }
+        return scores;
+    }
+
+
+    public static void getLevelInformation(Context context, List<World> worlds) {
         try {
             BufferedReader br = getReader(context);
             String line;
@@ -125,10 +142,7 @@ public class Reader {
                 int worldCounter = 0;
                 List<Integer> scores = new ArrayList<>();
                 World world = new World();
-//                boolean newWorld = false;
-
                 if(line.startsWith("#")) {
-//                    newWorld = true;
                     world = new World(line.substring(1, line.length()), worldCounter);
                     worldCounter++;
                 }
@@ -142,29 +156,11 @@ public class Reader {
                     line = br.readLine();
                 }
 
-//                if ( !newWorld ) {
                     world.setNumberOfLevels(levelCounter);
                     world.setScores(scores);
                     worlds.add(world);
-//                }
 
-
-
-
-
-//                if(line.startsWith("#")){
-//                    world = new World(line.substring(1, line.length()), worldCounter);
-//
-//                    levels.add(levelCounter);
-//                    worldCounter++;
-//                    levelCounter = 0;
-//                }else if (line.startsWith("$")){
-//                    scores.add(Integer.parseInt(line.split(";")[1]));
-//                    levelCounter++;
-//                }
             }
-//            levels.add(levelCounter);
-//            levels.remove(0);
             worlds.remove(0);
             br.close();
             closeStreams();
@@ -248,7 +244,7 @@ public static Level LoadLevel(Context context, int worldID, int levelID) {
     }
 
 
-public static void getLevelCount(Context context, List<String> worlds, List<Integer> levels) {
+public static void getLevelInformation(Context context, List<String> worlds, List<Integer> levels) {
         try {
             BufferedReader br = getReader(context);
             String line;

@@ -56,7 +56,7 @@ public class LevelActivity extends FragmentActivity {
     private List<Fragment> getFragments() {
 //        List<Integer> levels = new ArrayList<>();
 //        List<Integer> scores = new ArrayList<>();
-        Reader.getLevelCount(this, worlds);
+        Reader.getLevelInformation(this, worlds);
 
         List<Fragment> fragments = new ArrayList<Fragment>();
         for (int i = 0; i < worlds.size(); i++) {

@@ -26,17 +26,21 @@ public class Utils {
         Level testLevel;
         List<Dot> dots = new ArrayList<>();
         List<Line> lines = new ArrayList<>();
-        Random rand = new Random();
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
-
-        for(int i = 0; i < dots.size()-2; i++) {
-            lines.add(new Line(dots.get(i), i, dots.get(i+2),  i+2));
-        }
+//        Random rand = new Random();
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//        dots.add(new Dot(rand.nextInt(100), rand.nextInt(100)));
+//
+//        for(int i = 0; i < dots.size()-2; i++) {
+//            lines.add(new Line(dots.get(i), i, dots.get(i+2),  i+2));
+//        }
+        dots.add(new Dot(10, 10));
+        dots.add(new Dot(90, 10));
+        dots.add(new Dot(10, 90));
+        dots.add(new Dot(90, 90));
         testLevel = new Level(dots, lines);
         testLevel.setHeight(100);
         testLevel.setWidth(100);
