@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Jay Cole
  * 11/19/2015.
  */
-public class Level implements Cloneable{
+public class Level implements Cloneable {
 
     private static final String TAG = Level.class.getSimpleName();
 
@@ -55,13 +55,15 @@ public class Level implements Cloneable{
     public void setTag(String tag) {
         this.tag = tag;
     }
-    public String getTag () {
+
+    public String getTag() {
         return tag;
     }
 
     public List<Dot> getDots() {
         return dots;
     }
+
     public void setDots(List<Dot> dots) {
         this.dots = dots;
     }
@@ -69,6 +71,7 @@ public class Level implements Cloneable{
     public List<Line> getLines() {
         return lines;
     }
+
     public void setLines(List<Line> lines) {
         this.lines = lines;
     }
@@ -76,6 +79,7 @@ public class Level implements Cloneable{
     public int getScore() {
         return score;
     }
+
     public void setScore(int score) {
         this.score = score;
     }
@@ -83,6 +87,7 @@ public class Level implements Cloneable{
     public int getTime() {
         return time;
     }
+
     public void setTime(int time) {
         this.time = time;
     }
@@ -90,6 +95,7 @@ public class Level implements Cloneable{
     public int getTurns() {
         return turns;
     }
+
     public void setTurns(int turns) {
         this.turns = turns;
     }
@@ -97,6 +103,7 @@ public class Level implements Cloneable{
     public int getWidth() {
         return width;
     }
+
     public void setWidth(int width) {
         this.width = width;
     }
@@ -104,6 +111,7 @@ public class Level implements Cloneable{
     public int getStart() {
         return stars;
     }
+
     public void setStars(int stars) {
         this.stars = stars;
     }
@@ -111,12 +119,13 @@ public class Level implements Cloneable{
     public int getHeight() {
         return height;
     }
+
     public void setHeight(int height) {
         this.height = height;
     }
 
     @Override
-     public Object clone() throws CloneNotSupportedException{
+    public Object clone() throws CloneNotSupportedException {
         List<Dot> dots = new ArrayList<>();
         List<Line> lines = new ArrayList<>();
 

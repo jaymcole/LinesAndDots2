@@ -1,25 +1,27 @@
 package hollow.jaymc.linesanddots.utils;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import hollow.jaymc.linesanddots.gameObjects.Dot;
 import hollow.jaymc.linesanddots.gameObjects.Level;
 import hollow.jaymc.linesanddots.gameObjects.Line;
 
 /**
- * Created by jaymc on 1/14/2016.
+ * Created by jaymc
+ * 1/14/2016.
  */
 public class Utils {
 
     private static final String TAG = Utils.class.getName();
-
+    public static final String SAVE_FILE = "saves.txt";
     /**
-     * Generates a default Level object.
-     * @return
+     * @return A default level.
      */
     public static Level getTestLevel() {
         Log.i(TAG, "Loading default level.");
@@ -44,13 +46,13 @@ public class Utils {
         testLevel = new Level(dots, lines);
         testLevel.setHeight(100);
         testLevel.setWidth(100);
+        testLevel.setTag("W-1L-1");
         return testLevel;
     }
 
     /**
-     * Converts theString into a list of Integers.
      * Assumes " " as delimiter.
-     * @return
+     * @return Integers converted from theString.
      */
     public static List<Integer> processString(String theString) {
         theString = theString.trim();
@@ -65,9 +67,9 @@ public class Utils {
     }
 
     /**
-     * Creates and returns a list of Dot objects from a list of Integers.
-     * @param ints
-     * @return
+     *
+     * @param ints Integers used to creates dots.
+     * @return Creates and returns a list of Dot objects from a list of Integers.
      */
     public static List<Dot> getDots(List<Integer> ints) {
         List<Dot> dots = new ArrayList<>();
@@ -78,9 +80,9 @@ public class Utils {
     }
 
     /**
-     * Creates and returns a list of Line objects from a list of Dot objects and Integers.
+     *
      * @param dots, ints
-     * @return
+     * @return Creates and returns a list of Line objects from a list of Dot objects and Integers.
      */
     public static List<Line> getLines(List<Dot> dots, List<Integer> ints) {
         List<Line> lines = new ArrayList<>();
@@ -88,5 +90,37 @@ public class Utils {
             lines.add(new Line(dots.get(ints.get(i)), ints.get(i), dots.get(ints.get(i+1)), ints.get(i+1) ));
         }
         return lines;
+    }
+
+    /**
+     *
+     * @param context Context for getFilesDir.
+     * @return A file of saved scores.
+     */
+    public static File getSaveFile(Context context) {
+        return new File(context.getFilesDir() + "/" + SAVE_FILE);
+    }
+
+    /**
+     *
+     * @param worldID Index of the world.
+     * @param levelID Index of the level.
+     * @return A level tag.
+     */
+    public static String createTag(int worldID, int levelID) {
+        return "$W" + worldID + "L" +levelID;
+    }
+
+    /**
+     *
+     * @param newScore The new score to compare.
+     * @param old The old score.
+     * @return True if new score is higher.
+     */
+    public static boolean compareScore(String newScore, String old) {
+        // TODO - Factor in turns and time.
+        int scoreNew = Integer.parseInt(newScore.split(";")[1]);
+        int scoreOld = Integer.parseInt(old.split(";")[1]);
+        return scoreNew > scoreOld;
     }
 }

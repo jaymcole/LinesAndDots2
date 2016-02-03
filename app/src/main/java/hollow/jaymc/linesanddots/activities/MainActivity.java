@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void test(View view) {
         Log.d(TAG, "Save Test.");
-        Writer.saveLevel(this, "", 1, 1);
+        List<String> scores = Reader.getScores(this);
+        for(int i = 0; i < scores.size(); i++) {
+            Log.d(TAG, scores.get(i));
+        }
+    }
+
+    public void delete(View view) {
+        Log.d(TAG, "Deleting saves.");
+        Writer.deleteSaves(this);
     }
 }

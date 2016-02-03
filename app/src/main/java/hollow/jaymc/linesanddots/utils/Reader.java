@@ -5,7 +5,9 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,76 +24,76 @@ import hollow.jaymc.linesanddots.gameObjects.World;
  */
 public class Reader {
     public static final int TAG_POS = 0;
-//    public static final int SCORE_POS = 1;
-//    public static final int TURNS_POS = 2;
     public static final int DOTS_POS = 1;
     public static final int LINES_POS = 2;
-
-    public static final String SAVE_FILE = "saves.txt";
 
     private static final String TAG = Reader.class.getName();
     private static final int LEVEL_DATA_ID = R.raw.levels;
 
-    private static InputStream is;
-    private static InputStreamReader isr;
+//    private static InputStream is;
+//    private static InputStreamReader isr;
+//    private static FileInputStream fis;
+//    private static FileReader fr;
 
-    /**
-     * Creates and returns a BufferedReader
-     * @param context   The context from the activity that called this method.
-     * @return  BufferedReader  The BufferedReader ready to read from the level data file.
-     */
-    private static BufferedReader getReader(Context context) {
-        is = context.getResources().openRawResource(LEVEL_DATA_ID);
-        isr = new InputStreamReader(is);
-        return new BufferedReader(isr);
-    }
+//    /**
+//     * Creates and returns a BufferedReader
+//     * @param context The context from the activity that called this method.
+//     * @return BufferedReader  The BufferedReader ready to read from the level data file.
+//     */
+//    private static BufferedReader getReader(InputStream is, InputStreamReader isr, Context context) {
+//        is = context.getResources().openRawResource(LEVEL_DATA_ID);
+//        isr = new InputStreamReader(is);
+//        return new BufferedReader(isr);
+//    }
+//
+//    /**
+//     *
+//     * @param file
+//     * @return A new BufferedReader of the specified file.
+//     * @throws FileNotFoundException
+//     */
+//    private static BufferedReader getReader(FileReader fr, File file) {
+//        try {
+//            fr = new FileReader(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            Log.e(TAG, "Failed to find file. (getReader() method)");
+//        }
+//        return new BufferedReader(fr);
+//    }
 
-    public static List<String> loadSaves(InputStream inputStream){
-        List<String> saves = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        try {
-            while((line = br.readLine()) != null) {
-                Log.d(TAG, line);
-                saves.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return saves;
-    }
 
     /**
      * Returns Level object of levelID of worldID.
      * Reads from file LEVEL_DATA_ID.
-     * @param context
-     * @param worldID   An Integeer denoting which world to load.
-     * @param levelID   An Integer denoting which level to load.
-     * @return          A level object constructed from
+     *
+     * @param context Activity context.
+     * @param tag     String denoting which level to load.
+     * @return A level object constructed from
      */
-    public static Level LoadLevel(Context context, int worldID, int levelID) {
+    public static Level loadLevel(Context context, String tag) {
+        InputStream is = context.getResources().openRawResource(LEVEL_DATA_ID);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
         try {
-            BufferedReader br = getReader(context);
+            if(is == null)
+                Log.e(TAG, "(loadLevel) InputStream is still null!");
+            if(isr == null)
+                Log.e(TAG, "(loadLevel) InputStreamReader is still null!");
+
             String line = "";
-            String levelTag = "$W" + worldID + "L" + levelID;
-            Log.d(TAG, "Looking for \"" + levelTag + "\"");
-            while ((line = br.readLine()) != null && !line.trim().startsWith(levelTag)) {
+            Log.d(TAG, "Looking for \"" + tag + "\"");
+            while ((line = br.readLine()) != null && !line.trim().startsWith(tag)) {
 
             }
-            br.close();
-            closeStreams();
 
-            if(line != null) {
-                return processLine(line.trim().substring(1));
+
+            if (line != null) {
+                return processLine(context, line.trim().substring(1));
             } else {
                 Log.e(TAG, "[ERROR] Failed to load level. Loading default instead.");
-                Log.e(TAG, "[ERROR] Attempted to load from world: " + worldID + ", Level: " + levelID);
+                Log.e(TAG, "[ERROR] Attempted to load from world: " + tag);
                 return Utils.getTestLevel();
             }
 
@@ -99,42 +101,24 @@ public class Reader {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            closeStreams(br, is, isr);
         }
         Log.e(TAG, "[ERROR] Failed to load level. Loading default instead.");
-        Log.e(TAG, "[ERROR] Attempted to load from world: " + worldID + ", Level: " + levelID);
+        Log.e(TAG, "[ERROR] Attempted to load from world: " + tag);
         return Utils.getTestLevel();
     }
 
-    private static Level processLine(String line) {
-        Level level = new Level();
-        String[] attributes = line.split(";");
-        level.setTag(attributes[TAG_POS]);
-//        level.setTurns(Integer.parseInt(attributes[TURNS_POS]));
-//        level.setScore(Integer.parseInt(attributes[SCORE_POS]));
-        level.setDots(Utils.getDots(Utils.processString(attributes[DOTS_POS])));
-        level.setLines(Utils.getLines(level.getDots(), Utils.processString(attributes[LINES_POS])));
-        return level;
-    }
-
-    public static List<String> getSaves(Context context) {
-        List<String> scores = new ArrayList<>();
-        File saves = new File(context.getFilesDir() + "/" + SAVE_FILE);
-        if(saves.exists()) {
-            try {
-                is = context.openFileInput(saves.getAbsolutePath());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            isr = new InputStreamReader(is);
-            BufferedReader br = getReader(context);
-        }
-        return scores;
-    }
-
-
     public static void getLevelInformation(Context context, List<World> worlds) {
+        InputStream is = context.getResources().openRawResource(LEVEL_DATA_ID);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
         try {
-            BufferedReader br = getReader(context);
+            if(is == null)
+                Log.e(TAG, "(getLevelInformation) InputStream is still null!");
+            if(isr == null)
+                Log.e(TAG, "(getLevelInformation) InputStreamReader is still null!");
+
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
@@ -142,134 +126,142 @@ public class Reader {
                 int worldCounter = 0;
                 List<Integer> scores = new ArrayList<>();
                 World world = new World();
-                if(line.startsWith("#")) {
+                if (line.startsWith("#")) {
                     world = new World(line.substring(1, line.length()), worldCounter);
+                    scores = new ArrayList<>();
                     worldCounter++;
                 }
 
                 while (line != null && !line.startsWith("#")) {
-                    if(line.startsWith("$")) {
+                    Log.d(TAG, "Line: " + line);
+                    if (line.startsWith("$")) {
+                        Log.d(TAG, "Approved");
                         levelCounter++;
-                        scores.add(Integer.parseInt(line.split(";")[1]));
+                        scores.add(getScore(context, line.split(";")[0]));
 
                     }
                     line = br.readLine();
                 }
 
-                    world.setNumberOfLevels(levelCounter);
-                    world.setScores(scores);
-                    worlds.add(world);
+                world.setNumberOfLevels(levelCounter);
+                world.setScores(scores);
+                worlds.add(world);
 
             }
             worlds.remove(0);
-            br.close();
-            closeStreams();
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void closeStreams() {
-        try {
-            if(is != null)
-                is.close();
-            if(isr != null)
-                isr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-}
-
-/*
-
-public static Level LoadLevel(Context context, int worldID, int levelID) {
-//        TODO - Make this better...
-        try {
-            BufferedReader br = getReader(context);
-            String line;
-            Log.d(TAG, "w:" + worldID + ", l:" + levelID);
-
-            int currentWorld = 0;
-            while ((line = br.readLine()) != null && currentWorld != worldID) {
-                Log.d(TAG, line);
-                if(line.trim().startsWith("#")) {
-                    currentWorld++;
-                }
-            }
-
-            int currentLevel = 0;
-            while ((line = br.readLine()) != null && currentLevel != levelID) {
-                Log.d(TAG, line);
-                if(line.trim().startsWith("$")) {
-                    currentLevel++;
-                }
-                if(line.startsWith("#")) {
-                    line = null;
-                    Log.e(TAG, "[ERROR] Failed to load level.\nLevel Not Found");
-                }
-            }
-
-//            for(int i = 0; i < levelID; i++) {
-//                while(line.length() < 4 && line != null) {
-//                    line = br.readLine();
-//                }
-//                if((line = br.readLine()) == null ) {
-//                    break;
-//                }
-//            }
-
-            br.close();
-            closeStreams();
-            if(line != null) {
-                return processLine(line.trim().substring(1));
-            } else {
-                Log.e(TAG, "[ERROR] Failed to load level. Loading default instead.");
-                Log.e(TAG, "[ERROR] Attempted to load from world: " + worldID + ", Level: " + levelID);
-                return Utils.getTestLevel();
-
-            }
 
         } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            closeStreams(br, is, isr);
         }
-        Log.e(TAG, "[ERROR] Failed to load level. Loading default instead.");
-        Log.e(TAG, "[ERROR] Attempted to load from world: " + worldID + ", Level: " + levelID);
-        return Utils.getTestLevel();
     }
 
+    /**
+     *
+     * @param context Activity Context
+     * @param line The string to process.
+     * @return A load level.
+     */
+    private static Level processLine(Context context, String line) {
+        Level level = new Level();
+        String[] attributes = line.split(";");
+        level.setTag(attributes[TAG_POS]);
+//        level.setTurns(Integer.parseInt(attributes[TURNS_POS]));
+        level.setScore(getScore(context, level.getTag()));
+        level.setDots(Utils.getDots(Utils.processString(attributes[DOTS_POS])));
+        level.setLines(Utils.getLines(level.getDots(), Utils.processString(attributes[LINES_POS])));
+        return level;
+    }
 
-public static void getLevelInformation(Context context, List<String> worlds, List<Integer> levels) {
+    public static List<String> getScores (Context context) {
+        List<String> scores = new ArrayList<>();
+        File file = Utils.getSaveFile(context);
+        FileReader fr = null;
+        BufferedReader br = null;
         try {
-            BufferedReader br = getReader(context);
+            fr = new FileReader(file);
+            br = new BufferedReader(fr);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to find file. (getReader() method)");
+        }
+        try {
             String line;
-            int counter = 0;
             while ((line = br.readLine()) != null) {
-                line = line.trim();
-
-                if(line.startsWith("#")){
-                    worlds.add(line.substring(1, line.length()));
-                    levels.add(counter);
-                    counter = 0;
-                }else if (line.startsWith("$")){
-                    counter++;
-                }
+                if(line.length() > 0);
+                    scores.add(line.trim());
             }
-            levels.add(counter);
-            levels.remove(0);
-            br.close();
-            closeStreams();
+
         } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeStreams(br, fr);
+        }
+        return scores;
+    }
+
+    public static int getScore(Context context, String tag) {
+        int score = 0;
+        File saves = Utils.getSaveFile(context);
+        if (saves.exists()) {
+            FileReader fr = null;
+            BufferedReader br = null;
+            try {
+                fr = new FileReader(saves);
+                br = new BufferedReader(fr);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Failed to find file. (getReader() method)");
+            }
+//            FileReader fr = null;
+//            BufferedReader br = getReader(fr, saves);
+            try {
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith(tag)) {
+                        score = Integer.parseInt(line.split(";")[1]);
+                        break;
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                closeStreams(br, fr);
+            }
+        }
+        return score;
+    }
+
+    private static void closeStreams(BufferedReader br, InputStream is, InputStreamReader isr) {
+        try {
+            if (is != null)
+                is.close();
+            if (isr != null)
+                isr.close();
+            if(br != null)
+                br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
- */
+    private static void closeStreams(BufferedReader br, FileReader fr) {
+        try {
+            if (fr != null)
+                fr.close();
+            if(br != null)
+                br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

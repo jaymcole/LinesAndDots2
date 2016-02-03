@@ -3,18 +3,15 @@ package hollow.jaymc.linesanddots.utils;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import hollow.jaymc.linesanddots.gameObjects.Level;
 
 /**
  * Created by jaymc
@@ -25,58 +22,71 @@ public class Writer {
     private static final String TAG = Writer.class.getName();
 
     public static void saveLevel(Context context, String tag, int score, int turns) {
-        File file = context.getFilesDir();
-        File save = new File(file.getPath() + "/" + Reader.SAVE_FILE);
-
+        File save = Utils.getSaveFile(context);
+        String saveEntry = tag + ";" + score + ";" + turns;
         if (!save.exists()) {
+            Log.d(TAG, "File does not exist. Attempting to create file.");
             try {
                 save.createNewFile();
+                if (save.exists())
+                    Log.d(TAG, "File now exists!");
+                else
+                    Log.d(TAG, "File STILL does not exist.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            Log.d(TAG, "File already exists.");
         }
 
         List<String> saves = new ArrayList<>();
+        int saveIndex = -1;
         if (save.exists()) {
-            try {
-                saves = Reader.loadSaves(new FileInputStream(save));
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, "[ERROR] save.exists()");
-                e.printStackTrace();
+
+            saves = Reader.getScores(context);
+            for (int i = 0; i < saves.size(); i++) {
+                if (saves.get(i).startsWith(tag)) {
+                    saveIndex = i;
+                    break;
+                }
             }
+
         } else {
             Log.e(TAG, "[ERROR] Can't find save file.");
         }
 
+        BufferedWriter writer = null;
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(save));
-            int lines = saves.size();
-            for(int i = 0; i < lines; i++) {
-                String line = saves.get(i);
-                if (line.startsWith(tag)) {
-                    writer.write(compareScores(line, tag, score, turns));
-                    break;
-                } else {
-                    writer.write(lines);
-                }
+            writer = new BufferedWriter(new FileWriter(save));
+            if (saveIndex == -1) {
+                saves.add(saveEntry);
+            } else if (Utils.compareScore(saveEntry, saves.get(saveIndex))) {
+                saves.set(saveIndex, saveEntry);
             }
-            writer.flush();
-            writer.close();
+            for (int i = 0; i < saves.size(); i++) {
+                writer.write(saves.get(i) + "\n");
+            }
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "[ERROR] FileNotFoundException");
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e(TAG, "[ERROR] IOException");
             e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null)
+                    writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private static String compareScores(String line, String tag, int score, int turns){
-        String[] attributes = line.split(";");
-        if (score > Integer.parseInt(attributes[2])) {
-            return tag + ";" + score + ";" + turns;
-        } else {
-            return line;
-        }
+    /**
+     * Deletes the save file.
+     * @param context Context from activity calling this method.
+     */
+    public static void deleteSaves(Context context) {
+        File file =  Utils.getSaveFile(context);
+        if(file.exists())
+            file.delete();
     }
 }
