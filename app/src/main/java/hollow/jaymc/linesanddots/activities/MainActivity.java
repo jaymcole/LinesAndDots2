@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void startGameActivity(View view, int worldID, int levelID) {
+    public void startGameActivity(View view) {
         Log.d(TAG, "Starting game activity");
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);

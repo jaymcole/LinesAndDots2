@@ -9,5 +9,8 @@
     <string name="main_activity_start">Start Game</string>
     <string name="main_activity_level_select">Level Select</string>
     <string name="main_activity_options">Options</string>
+
+    <string name="preferencesFile">jay.cole.linesanddots</string>
+    <string name="lastLevelPlayed">lastLevel</string>
 </resources>
 

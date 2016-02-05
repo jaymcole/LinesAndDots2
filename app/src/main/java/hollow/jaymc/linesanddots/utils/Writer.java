@@ -1,6 +1,7 @@
 package hollow.jaymc.linesanddots.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import hollow.jaymc.linesanddots.R;
+
 /**
  * Created by jaymc
  * 1/21/2016.
@@ -23,6 +26,7 @@ public class Writer {
 
     public static void saveLevel(Context context, String tag, int score, int turns) {
         File save = Utils.getSaveFile(context);
+        Log.d(TAG, "Tag: " + tag);
         String saveEntry = tag + ";" + score + ";" + turns;
         if (!save.exists()) {
             Log.d(TAG, "File does not exist. Attempting to create file.");
@@ -89,4 +93,19 @@ public class Writer {
         if(file.exists())
             file.delete();
     }
+
+    public static void saveSharedPreference(Context context, String key, int value) {
+        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferencesFile), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    public static void saveSharedPreference(Context context, String key, String value) {
+        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferencesFile), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
 }

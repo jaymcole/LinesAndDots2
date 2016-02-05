@@ -16,6 +16,9 @@ LevelActivity:
 
 Changes
 
+2/3/16
+    + Fixed a bug that prevented Reader from loading the world name.
+
 1/25/16
     - Added strings tot he resource file.
         - Updated Main activity buttons with string references instead of hardcoded text.

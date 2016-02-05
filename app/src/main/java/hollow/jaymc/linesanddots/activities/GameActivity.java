@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,8 @@ public class GameActivity extends Activity {
     private static final String TAG = GameActivity.class.getName();
     private MyView gamePanel;
 
-    public static final String LEVE_TAG = "TAG";
+    public static final String LEVEL_TAG = "TAG";
+
 
     public static final int BACKGROUND = Color.BLACK;
 
@@ -40,12 +40,11 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        File path = getFilesDir();
-        Log.d(TAG, "Path: " + path.toString());
-        level = Reader.loadLevel(this, getIntent().getExtras().getString(LEVE_TAG));
+        level = Reader.getLastLevel(this);
         createLevel();
         gamePanel = new MyView(this);
         setContentView(gamePanel);
+
     }
 
     @Override
@@ -161,14 +160,18 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK ) {
-            Log.d(TAG, "Starting game activity");
-            Intent intent = new Intent(this, LevelActivity.class);
-            startActivity(intent);
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startLevelSelect();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void startLevelSelect() {
+        Log.d(TAG, "Starting LevelActivity");
+        Intent intent = new Intent(this, LevelActivity.class);
+        startActivity(intent);
     }
 
     private static int Y_OFFSET = -85;
@@ -233,7 +236,14 @@ public class GameActivity extends Activity {
 
     private void win() {
         Log.d(TAG, "Level complete!");
-        Writer.saveLevel(this, "$" + level.getTag(), 3, 0);
+        Writer.saveLevel(this, level.getTag(), 3, 0);
+        level = Reader.getNextLevel(this, level.getTag());
+        if (level != null) {
+            createLevel();
+            Writer.saveSharedPreference(this, getString(R.string.lastLevelPlayed), level.getTag());
+        } else
+            startLevelSelect();
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -262,7 +272,8 @@ public class GameActivity extends Activity {
             canvas.drawText("Lines: " + lines.size(), 20, 20, paint);
             canvas.drawText("Dots: " + dots.size(), 20, 40, paint);
             canvas.drawText("Intersections: " + intersections.size(), 20, 60, paint);
-
+            if (level != null)
+                canvas.drawText("Current Level: " + level.getTag(), 20, 80, paint);
             for (int i = 0; i < lines.size(); i++) {
                 lines.get(i).render(canvas, paint);
             }

@@ -1,5 +1,6 @@
 package hollow.jaymc.linesanddots.gameObjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hollow.jaymc.linesanddots.activities.LevelActivity;
@@ -48,8 +49,17 @@ public class World {
         return numberOfLevels;
     }
 
+    public void increaseLevelCount(int n) {
+        setNumberOfLevels(n + getNumberOfLevels());
+    }
+
     public void setScores(List<Integer> scores) {
         this.scores = scores;
+    }
+    public void addScore(int score) {
+        if(scores == null)
+            scores = new ArrayList<Integer>();
+        scores.add(score);
     }
     public int[] getScores() {
         int[] arr = new int[scores.size()];

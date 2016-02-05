@@ -24,7 +24,7 @@ public class Utils {
      * @return A default level.
      */
     public static Level getTestLevel() {
-        Log.i(TAG, "Loading default level.");
+        Log.e(TAG, "Loading default level...");
         Level testLevel;
         List<Dot> dots = new ArrayList<>();
         List<Line> lines = new ArrayList<>();
@@ -46,7 +46,7 @@ public class Utils {
         testLevel = new Level(dots, lines);
         testLevel.setHeight(100);
         testLevel.setWidth(100);
-        testLevel.setTag("W-1L-1");
+        testLevel.setTag(createTag(-1,-1));
         return testLevel;
     }
 
@@ -123,4 +123,25 @@ public class Utils {
         int scoreOld = Integer.parseInt(old.split(";")[1]);
         return scoreNew > scoreOld;
     }
+
+    /**
+     *
+     * @param tag   Level identifier tag "$W__S__" where _ is a number.
+     * @return Returns the world ID extracted from a tag.
+     * Example: "$W40S3" returns 40
+     */
+    public static int extractWorld(String tag) {
+        return Integer.parseInt(tag.substring(tag.indexOf('W')+1, tag.indexOf('L')));
+    }
+
+    /**
+     *
+     * @param tag   Level identifier tag "$W__S__" where _ is a number.
+     * @return Returns the level ID extracted from a tag.
+     * Example: "$W40S3" returns 3
+     */
+    public static int extractLevel(String tag) {
+        return Integer.parseInt(tag.substring(tag.indexOf('L')+1));
+    }
+
 }
