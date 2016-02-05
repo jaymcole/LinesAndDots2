@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import hollow.jaymc.linesanddots.R;
 import hollow.jaymc.linesanddots.gameObjects.World;
@@ -39,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void test(View view) {
         Log.d(TAG, "Save Test.");
-        List<String> scores = Reader.getScores(this);
-        for(int i = 0; i < scores.size(); i++) {
-            Log.d(TAG, scores.get(i));
+        Map scores = Reader.getScores(this);
+
+        for(Object o : scores.values()) {
+            Log.d(TAG, "" + o);
         }
     }
 

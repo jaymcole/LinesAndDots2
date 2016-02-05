@@ -5,14 +5,13 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import hollow.jaymc.linesanddots.R;
 import hollow.jaymc.linesanddots.gameObjects.Level;
@@ -124,81 +123,22 @@ public class Reader {
         return level;
     }
 
-    // TODO - Move scores to SharedPreferences.
     /**
      *
-     * @param context Context from parent activity.
-     * @return Returns a list of all saved scores.
+     * @param context Any activity context.
+     * @return  Returns a Map<String, Integer> containing all saved scores.
      */
-    public static List<String> getScores(Context context) {
-        List<String> scores = new ArrayList<>();
-        File file = Utils.getSaveFile(context);
-        FileReader fr = null;
-        BufferedReader br = null;
-        try {
-            fr = new FileReader(file);
-            br = new BufferedReader(fr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Failed to find file. (getReader() method)");
-        }
-        try {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.length() > 0) ;
-                scores.add(line.trim());
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeStreams(br, fr);
-        }
-        return scores;
+    public static Map<String, Integer> getScores(Context context) {
+        SharedPreferences saves = context.getSharedPreferences(context.getString(R.string.saves), Context.MODE_PRIVATE);
+        return (Map<String, Integer>)saves.getAll();
     }
 
     /**
-     * @param context Context from classing calling this method.
-     * @param tag     Level identification tag.
-     * @return Returns the recorded score for a given level.
-     * Returns 0 if one does not exist.
+     *
+     * @param context Any activity context.
+     * @param tag Level tag of score to load
+     * @return Returns an integer score associated with tag. Returns 0 if one has not yet been set.
      */
-//    public static int getScore(Context context, String tag) {
-//        int score = 0;
-//        File saves = Utils.getSaveFile(context);
-//        if (saves.exists()) {
-//            FileReader fr = null;
-//            BufferedReader br = null;
-//            try {
-//                fr = new FileReader(saves);
-//                br = new BufferedReader(fr);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//                Log.e(TAG, "Failed to find file. (getReader() method)");
-//            }
-//            try {
-//
-//                String line;
-//                while ((line = br.readLine()) != null) {
-//                    if (line.startsWith(tag)) {
-//                        score = Integer.parseInt(line.split(";")[1]);
-//                        break;
-//                    }
-//                }
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                closeStreams(br, fr);
-//            }
-//        }
-//        return score;
-//    }
-
     public static int getScore(Context context, String tag) {
         SharedPreferences scores = context.getSharedPreferences(context.getString(R.string.saves), Context.MODE_PRIVATE);
         return scores.getInt(tag, 0);

@@ -16,6 +16,10 @@ LevelActivity:
 
 Changes
 
+2/5/16
+    - Updated Writer.deleteSaves() to remove saves from SharedPreferences.
+    - Updated Reader.getSaves() to retrieve saves from SharedPreferences.
+
 2/3/16
     + Fixed a bug that prevented Reader from loading the world name.
 
