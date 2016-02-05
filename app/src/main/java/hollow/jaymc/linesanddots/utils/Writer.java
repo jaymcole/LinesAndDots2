@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -95,17 +93,24 @@ public class Writer {
     }
 
     public static void saveSharedPreference(Context context, String key, int value) {
-        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferencesFile), Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferences), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
+    public static void saveScore(Context context, String tag, int score)
+    {
+        SharedPreferences scores = context.getSharedPreferences(context.getString(R.string.saves), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = scores.edit();
+        editor.putInt(tag, score);
+        editor.commit();
+    }
+
     public static void saveSharedPreference(Context context, String key, String value) {
-        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferencesFile), Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(context.getString(R.string.preferences), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         editor.commit();
     }
-
 }

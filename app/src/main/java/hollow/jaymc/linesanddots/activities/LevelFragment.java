@@ -16,6 +16,7 @@ import android.widget.TableRow;
 import hollow.jaymc.linesanddots.R;
 import hollow.jaymc.linesanddots.gameObjects.Level;
 import hollow.jaymc.linesanddots.gameObjects.World;
+import hollow.jaymc.linesanddots.utils.Reader;
 import hollow.jaymc.linesanddots.utils.Utils;
 import hollow.jaymc.linesanddots.utils.Writer;
 
@@ -97,8 +98,10 @@ public class LevelFragment extends Fragment {
 
                     final int levelId = row * NUM_COL + col;
 //                    button.setText("" + row + ", " + col + " (" + scores[levelId] + ")");
-                    button.setText("" + row + ", " + col + " (" + scores[counter] + ") " + counter);
-
+//                    button.setText("" + row + ", " + col + " (" + scores[counter] + ") " + counter);
+//                    button.setText("" + row + ", " + col);
+                    String text = "" + Reader.getScore(getContext(), Utils.createTag(worldID, levelId));
+                    button.setText(text);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

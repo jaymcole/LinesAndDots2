@@ -165,38 +165,52 @@ public class Reader {
      * @return Returns the recorded score for a given level.
      * Returns 0 if one does not exist.
      */
+//    public static int getScore(Context context, String tag) {
+//        int score = 0;
+//        File saves = Utils.getSaveFile(context);
+//        if (saves.exists()) {
+//            FileReader fr = null;
+//            BufferedReader br = null;
+//            try {
+//                fr = new FileReader(saves);
+//                br = new BufferedReader(fr);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//                Log.e(TAG, "Failed to find file. (getReader() method)");
+//            }
+//            try {
+//
+//                String line;
+//                while ((line = br.readLine()) != null) {
+//                    if (line.startsWith(tag)) {
+//                        score = Integer.parseInt(line.split(";")[1]);
+//                        break;
+//                    }
+//                }
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                closeStreams(br, fr);
+//            }
+//        }
+//        return score;
+//    }
+
     public static int getScore(Context context, String tag) {
-        int score = 0;
-        File saves = Utils.getSaveFile(context);
-        if (saves.exists()) {
-            FileReader fr = null;
-            BufferedReader br = null;
-            try {
-                fr = new FileReader(saves);
-                br = new BufferedReader(fr);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Failed to find file. (getReader() method)");
-            }
-            try {
+        SharedPreferences scores = context.getSharedPreferences(context.getString(R.string.saves), Context.MODE_PRIVATE);
+        return scores.getInt(tag, 0);
+    }
 
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (line.startsWith(tag)) {
-                        score = Integer.parseInt(line.split(";")[1]);
-                        break;
-                    }
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                closeStreams(br, fr);
-            }
-        }
-        return score;
+    /**
+     * @param context Context from the activity calling this method.
+     * @return Returns the last level played.
+     */
+    public static Level getLastLevel(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferences), 0);
+        return getLevel(context, settings.getString(context.getResources().getString(R.string.lastLevelPlayed), Utils.createTag(0, 0)));
     }
 
     /**
@@ -266,14 +280,5 @@ public class Reader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * @param context Context from the activity calling this method.
-     * @return Returns the last level played.
-     */
-    public static Level getLastLevel(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(context.getResources().getString(R.string.preferencesFile), 0);
-        return getLevel(context, settings.getString(context.getResources().getString(R.string.lastLevelPlayed), Utils.createTag(0, 0)));
     }
 }

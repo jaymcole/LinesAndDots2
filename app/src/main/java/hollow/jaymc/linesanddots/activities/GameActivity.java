@@ -236,7 +236,8 @@ public class GameActivity extends Activity {
 
     private void win() {
         Log.d(TAG, "Level complete!");
-        Writer.saveLevel(this, level.getTag(), 3, 0);
+//        Writer.saveLevel(this, level.getTag(), 3, 0);
+        Writer.saveScore(this, level.getTag(), 3);
         level = Reader.getNextLevel(this, level.getTag());
         if (level != null) {
             createLevel();

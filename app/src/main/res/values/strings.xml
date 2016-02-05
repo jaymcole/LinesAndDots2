@@ -10,7 +10,8 @@
     <string name="main_activity_level_select">Level Select</string>
     <string name="main_activity_options">Options</string>
 
-    <string name="preferencesFile">jay.cole.linesanddots</string>
+    <string name="preferences">jay.cole.linesanddots.preferences</string>
+    <string name="saves">jay.cole.linesanddots.saves</string>
     <string name="lastLevelPlayed">lastLevel</string>
 </resources>
 
