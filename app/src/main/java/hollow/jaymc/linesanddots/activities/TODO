@@ -30,7 +30,7 @@ Changes
 
 
 1/24/16
-- GameActivity now load a level from information provided in a bundle.
-- Added a PagerTabStrip to the LevelActivity.
-- Added Log.i to Util.getTestLevel();
-- Fix a bug preventing LevelFragments from creating enough buttons.
+    - GameActivity now load a level from information provided in a bundle.
+    - Added a PagerTabStrip to the LevelActivity.
+    - Added Log.i to Util.getTestLevel();
+    - Fix a bug preventing LevelFragments from creating enough buttons.

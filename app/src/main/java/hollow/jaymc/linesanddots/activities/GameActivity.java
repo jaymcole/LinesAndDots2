@@ -287,14 +287,14 @@ public class GameActivity extends Activity {
             canvas.drawRect(gameBounds, paint);
 
 
-            paint.setColor(Color.RED);
-            if (point != null) {
-                canvas.drawLine(0, point.getY(), point.getX(), point.getY(), paint);
-                canvas.drawLine(point.getX(), point.getY(), getWidth(), point.getY(), paint);
-                canvas.drawLine(point.getX(), 0, point.getX(), point.getY(), paint);
-                canvas.drawLine(point.getX(), point.getY(), point.getX(), getHeight(), paint);
-                canvas.drawCircle(point.getX(), point.getY(), 25, paint);
-            }
+//            paint.setColor(Color.RED);
+//            if (point != null) {
+//                canvas.drawLine(0, point.getY(), point.getX(), point.getY(), paint);
+//                canvas.drawLine(point.getX(), point.getY(), getWidth(), point.getY(), paint);
+//                canvas.drawLine(point.getX(), 0, point.getX(), point.getY(), paint);
+//                canvas.drawLine(point.getX(), point.getY(), point.getX(), getHeight(), paint);
+//                canvas.drawCircle(point.getX(), point.getY(), 25, paint);
+//            }
         }
     }
 }

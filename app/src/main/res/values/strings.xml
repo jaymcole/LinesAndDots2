@@ -1,4 +1,5 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">Lines And Dots</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_game">GameActivity</string>
@@ -6,12 +7,23 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">%1$d</string>
 
+    <!-- Main Activity -->
     <string name="main_activity_start">Start Game</string>
     <string name="main_activity_level_select">Level Select</string>
     <string name="main_activity_options">Options</string>
 
+    <!-- Settings Activity -->
+    <string name="statistics_view">Statistics</string>
+    <string name="options_view">Options</string>
+    <string name="danger_view">Danger Zone</string>
+
+    <!-- Level Select Fragment -->
+    <string name="gridview">gridview</string>
+
+    <!-- SharedPreferences -->
     <string name="preferences">jay.cole.linesanddots.preferences</string>
     <string name="saves">jay.cole.linesanddots.saves</string>
     <string name="lastLevelPlayed">lastLevel</string>
+    <string name="title_activity_level_fragment2">LevelFragment2</string>
 </resources>
 

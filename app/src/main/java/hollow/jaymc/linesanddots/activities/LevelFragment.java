@@ -2,6 +2,7 @@ package hollow.jaymc.linesanddots.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -37,6 +39,13 @@ public class LevelFragment extends Fragment {
 
     public LevelFragment() {
     }
+
+//    @Override
+//    public void onPause() {
+//        Log.d(TAG, "Pausing...");
+//        super.onPause();
+//        finish();
+//    }
 
     public static final LevelFragment newInstance(World world) {
         LevelFragment f = new LevelFragment();
@@ -91,7 +100,7 @@ public class LevelFragment extends Fragment {
 
             for (int col = 0; col < NUM_COL; col++) {
                 if (row * NUM_COL + col < totalLevels) {
-                    Button button = new Button(v.getContext());
+                    ImageButton button = new ImageButton(v.getContext());
 
 
                     final int worldID = getArguments().getInt(WORLD_ID);
@@ -100,8 +109,19 @@ public class LevelFragment extends Fragment {
 //                    button.setText("" + row + ", " + col + " (" + scores[levelId] + ")");
 //                    button.setText("" + row + ", " + col + " (" + scores[counter] + ") " + counter);
 //                    button.setText("" + row + ", " + col);
-                    String text = "" + Reader.getScore(getContext(), Utils.createTag(worldID, levelId));
-                    button.setText(text);
+
+//                    String text = "" + Reader.getScore(getContext(), Utils.createTag(worldID, levelId));
+//                    button.setText(text);
+                    int score = Reader.getScore(getContext(), Utils.createTag(worldID, levelId));
+                    if(score == 0)
+                        button.setImageDrawable(getResources().getDrawable(R.drawable.stars0, null));
+                    else if(score == 1)
+                        button.setImageDrawable(getResources().getDrawable(R.drawable.stars1, null));
+                    else if(score == 2)
+                        button.setImageDrawable(getResources().getDrawable(R.drawable.stars2, null));
+                    else if(score == 3)
+                        button.setImageDrawable(getResources().getDrawable(R.drawable.stars3, null));
+
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

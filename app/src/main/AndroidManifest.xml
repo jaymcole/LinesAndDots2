@@ -35,6 +35,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hollow.jaymc.linesanddots.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".activities.LevelFragment2"
+            android:label="@string/title_activity_level_fragment2"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
